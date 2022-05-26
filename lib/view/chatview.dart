@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:message/configs/appcolors.dart';
 import 'package:message/configs/appimages.dart';
 import 'package:message/databases/messagedatabase.dart';
-import 'package:message/models/massagemodel.dart';
 import 'package:message/models/message.dart';
 import 'package:message/models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';

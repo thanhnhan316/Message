@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:message/configs/appcolors.dart';
 import 'package:message/configs/appimages.dart';
-import 'package:message/models/massagemodel.dart';
 import 'package:message/models/user.dart';
 import 'package:message/view/chatview.dart';
 
@@ -75,7 +74,7 @@ class _ListChatViewState extends State<ListChatView> {
                                 ]),
                                 Column(
                                   children: <Widget>[
-                                    Text(messages[index].time,
+                                    Text("22 : 02",
                                         style: TextStyle(
                                             color: AppColors.BLACK38,
                                             fontSize: 15.0,

@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:message/configs/appcolors.dart';
-import 'package:message/configs/appimages.dart';
 import 'package:message/databases/userdatabase.dart';
 import 'package:message/models/user.dart';
 import 'package:message/view/homechatview.dart';
