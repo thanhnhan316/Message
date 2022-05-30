@@ -4,6 +4,7 @@ import 'package:message/configs/appimages.dart';
 import 'package:message/databases/messagedatabase.dart';
 import 'package:message/models/message.dart';
 import 'package:message/models/user.dart';
+import 'package:message/widgets/message.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ChatView extends StatefulWidget {
@@ -40,7 +41,6 @@ class _ChatViewState extends State<ChatView> {
     List<Message> list = await MessageDatabase.instance.readAllMessage();
     // chỉ lấy những tin nhắn liên quan đến người gửi và người nhận
     ls = [];
-    print(userId);
     for (Message i in list) {
       if ((i.senderId == userId && i.receiverId == widget.user.id) ||
           (i.senderId == widget.user.id && i.receiverId == userId)) {
@@ -114,53 +114,13 @@ class _ChatViewState extends State<ChatView> {
 
   Widget buildContent() {
     return Expanded(
-      child:ls.length == 0 ? Center(child: Text("Chưa có tin nhắn nào")): isLoading
-          ? Container(
-              height: size.height * 0.1, child: CircularProgressIndicator())
-          : ListView.builder(
-              reverse: true,
-              padding: EdgeInsets.only(top: 15.0),
-              itemCount: ls.length,
-              itemBuilder: (BuildContext context, int index) {
-                return buildMessage(ls[index]);
-              },
-            ),
+      child: ls.length == 0
+          ? Center(child: Text("Chưa có tin nhắn nào"))
+          : isLoading
+              ? Container(
+                  height: size.height * 0.1, child: CircularProgressIndicator())
+              : MessageItem(ls: ls, userId: userId)
     );
-  }
-
-  Widget buildMessage(Message message) {
-    return Container(
-        padding: EdgeInsets.symmetric(horizontal: 17, vertical: 9),
-        margin: message.senderId == userId
-            ? EdgeInsets.only(bottom: 10, left: size.width * 0.3)
-            : EdgeInsets.only(bottom: 10, right: size.width * 0.3),
-        decoration: BoxDecoration(
-            color: message.senderId == userId
-                ? AppColors.SENDMESSAGE
-                : AppColors.WHITE,
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(15.0),
-                bottomLeft: Radius.circular(15.0))),
-        child: Container(
-          child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: message.senderId == userId
-                  ? CrossAxisAlignment.end
-                  : CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(message.time,
-                    style: TextStyle(
-                        color: AppColors.BLACK38,
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.w600)),
-                SizedBox(height: 8.0),
-                Text(message.value,
-                    style: TextStyle(
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.w600,
-                    ))
-              ]),
-        ));
   }
 
   inputMessage() {

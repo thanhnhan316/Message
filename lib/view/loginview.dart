@@ -144,8 +144,13 @@ class _LoginViewState extends State<LoginView> {
   }
 
   void goToHome() {
-    Navigator.pushReplacement(context,
-        MaterialPageRoute(builder: (context) => HomeChatView(user: user)));
+    // //xóa màn hình trước đó
+    // Navigator.pushReplacement(
+    //     context, MaterialPageRoute(builder: (context) => LoginView()));
+    //xóa tất cả màn hình đã đi qua
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => HomeChatView(user: user)),
+        (Route<dynamic> route) => false);
   }
 
   void goToRegister() {

@@ -3,6 +3,7 @@ import 'package:message/configs/appcolors.dart';
 import 'package:message/configs/appvalues.dart';
 import 'package:message/databases/userdatabase.dart';
 import 'package:message/models/user.dart';
+import 'package:message/view/homechatview.dart';
 import 'package:message/view/loginview.dart';
 import 'package:message/widgets/widgetbutton.dart';
 import 'package:message/widgets/widgetinput.dart';
@@ -17,10 +18,10 @@ class RegisterView extends StatefulWidget {
 class _RegisterViewState extends State<RegisterView> {
   late Size size;
   late List<User> users;
-  final userNameController = TextEditingController();
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-  final rePasswordController = TextEditingController();
+  TextEditingController userNameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController rePasswordController = TextEditingController();
 
   @override
   void initState() {
@@ -98,24 +99,27 @@ class _RegisterViewState extends State<RegisterView> {
   void addUser() async {
     if (checkFormValid()) {
       if (checkUserName()) {
-        if (checkLenthPassword()) {
-          if (checkPassword()) {
-            final user = User(
-                userName: userNameController.value.text.trim(),
-                fullName: "fullName",
-                password: passwordController.value.text.trim(),
-                email: emailController.value.text.trim(),
-                avatar: "avatar",
-                status: "status");
+        if (checkEmail()) {
+          if (checkLenthPassword()) {
+            if (checkPassword()) {
+              final user = User(
+                  userName: userNameController.value.text.trim(),
+                  fullName: "fullName",
+                  password: passwordController.value.text.trim(),
+                  email: emailController.value.text.trim(),
+                  avatar: "avatar",
+                  status: "status");
 
-            await UserDatabase.instance.create(user);
-            goToLogin();
-            showToast(context, "Đăng ký thành công");
+              await UserDatabase.instance.create(user);
+              registerSuccess(user);
+            } else {
+              showToast(context, "Mật khẩu không trùng nhau");
+            }
           } else {
-            showToast(context, "Mật khẩu không trùng nhau");
+            showToast(context, "Mật khẩu phải dài hơn 6 ký tự");
           }
         } else {
-          showToast(context, "Mật khẩu phải dài hơn 6 ký tự");
+          showToast(context, "Email chưa đúng định dạng");
         }
       } else {
         showToast(context, "Tên người dùng đã tồn tại");
@@ -126,8 +130,15 @@ class _RegisterViewState extends State<RegisterView> {
   }
 
   void goToLogin() {
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => LoginView()));
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => LoginView()),
+        (Route<dynamic> route) => false);
+  }
+
+  void goToHome(User user) {
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => HomeChatView(user: user)),
+        (Route<dynamic> route) => false);
   }
 
   bool checkUserName() {
@@ -156,6 +167,14 @@ class _RegisterViewState extends State<RegisterView> {
     return true;
   }
 
+  bool checkEmail() {
+    String value = emailController.value.text.trim();
+    Pattern pattern =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    RegExp regex = new RegExp(pattern as String);
+    return (regex.hasMatch(value)) ? true : false;
+  }
+
   void showToast(BuildContext context, String value) {
     final scaffold = ScaffoldMessenger.of(context);
     scaffold.showSnackBar(
@@ -165,5 +184,27 @@ class _RegisterViewState extends State<RegisterView> {
             label: 'Đã hiểu', onPressed: scaffold.hideCurrentSnackBar),
       ),
     );
+  }
+
+  void registerSuccess(User user) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+              title: Text('${user.userName} đã đăng ký thành công'),
+              content: Text(' Bạn có muốn đăng nhập?'),
+              actions: <Widget>[
+                TextButton(
+                    onPressed: () {
+                      goToLogin();
+                    },
+                    child: Text('trở lại')),
+                TextButton(
+                    onPressed: () {
+                      goToHome(user);
+                    },
+                    child: Text('Đồng ý')),
+              ]);
+        });
   }
 }

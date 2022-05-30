@@ -64,9 +64,6 @@ CREATE TABLE $tableUser (
     final db = await instance.database;
     // sắp xếp
     // final orderBy = '${UserFields.userName} ASC';
-    // final result =
-    //     await db.rawQuery('SELECT * FROM $tableNotes ORDER BY $orderBy');
-
     final result = await db.query(tableUser);
     return result.map((json) => User.fromJson(json)).toList();
   }
@@ -74,7 +71,7 @@ CREATE TABLE $tableUser (
 //Cập nhật thông tin một user
   Future<int> update(User users) async {
     final db = await instance.database;
-  
+
     return db.update(
       tableUser,
       users.toJson(),
