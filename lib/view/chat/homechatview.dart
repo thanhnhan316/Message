@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:message/configs/appcolors.dart';
 import 'package:message/configs/appimages.dart';
+import 'package:message/configs/appvalues.dart';
 import 'package:message/databases/messagedatabase.dart';
 import 'package:message/databases/userdatabase.dart';
 import 'package:message/models/message.dart';
 import 'package:message/models/user.dart';
-import 'package:message/view/loginview.dart';
-import 'package:message/view/profileview.dart';
+import 'package:message/view/login/loginview.dart';
+import 'package:message/view/profile/profileview.dart';
 import 'package:message/widgets/listchat.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -105,35 +106,17 @@ class _HomeChatViewState extends State<HomeChatView> {
     return Container(
         width: double.maxFinite,
         height: size.height * 0.11,
-        child:
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          CircleAvatar(
-              radius: size.height * 0.032,
-              backgroundImage: AssetImage(AppImages.Logo)),
+        child: Row(children: [
+          IconButton(
+              onPressed: () {
+                goToHome();
+              },
+              icon: Icon(Icons.arrow_back,
+                  color: AppColors.BLACK87, size: size.height * 0.04)),
+          SizedBox(width: 20),
           Text(widget.user.userName,
               style: TextStyle(
-                  fontSize: size.height * 0.035, fontWeight: FontWeight.bold)),
-          PopupMenuButton(
-              itemBuilder: (context) => [
-                    PopupMenuItem(
-                        child: GestureDetector(
-                            onTap: () => goToProfile(),
-                            child: Container(
-                                child: Row(children: [
-                              Icon(Icons.person, size: size.height * 0.037),
-                              SizedBox(width: 15),
-                              Text("Profile")
-                            ])))),
-                    PopupMenuItem(
-                        child: GestureDetector(
-                            onTap: () => logout(),
-                            child: Container(
-                                child: Row(children: [
-                              Icon(Icons.logout, size: size.height * 0.037),
-                              SizedBox(width: 15),
-                              Text("Logout")
-                            ]))))
-                  ])
+                  fontSize: size.height * 0.035, fontWeight: FontWeight.bold))
         ]));
   }
 
@@ -146,7 +129,7 @@ class _HomeChatViewState extends State<HomeChatView> {
                 title: new TextField(
                     controller: searchController,
                     decoration: new InputDecoration(
-                        hintText: 'Search', border: InputBorder.none),
+                        hintText: AppValues.search, border: InputBorder.none),
                     onChanged: (value) {
                       search(value.toLowerCase().trim());
                     }))));
@@ -159,6 +142,7 @@ class _HomeChatViewState extends State<HomeChatView> {
             setState(() {
               refreshAllMessage();
               isSelect = true;
+              searchController.clear();
             });
           },
           child: Card(
@@ -167,12 +151,13 @@ class _HomeChatViewState extends State<HomeChatView> {
                   color: isSelect ? AppColors.SENDMESSAGE : AppColors.WHITE,
                   width: size.width * 0.45,
                   height: size.height * 0.05,
-                  child: Center(child: Text("Đã tương tác"))))),
+                  child: Center(child: Text(AppValues.interactive))))),
       GestureDetector(
           onTap: () {
             setState(() {
               refreshUsers();
               isSelect = false;
+              searchController.clear();
             });
           },
           child: Card(
@@ -181,7 +166,7 @@ class _HomeChatViewState extends State<HomeChatView> {
                   color: !isSelect ? AppColors.SENDMESSAGE : AppColors.WHITE,
                   width: size.width * 0.45,
                   height: size.height * 0.05,
-                  child: Center(child: Text("Người dùng hệ thống")))))
+                  child: Center(child: Text(AppValues.userSystem)))))
     ]);
   }
 
@@ -199,23 +184,7 @@ class _HomeChatViewState extends State<HomeChatView> {
     }
   }
 
-  Future getUserPreference() async {
-    final prefs = await SharedPreferences.getInstance();
-    prefs.remove('userId');
-  }
-
-  void logout() {
-    //xóa thông tin user đã login
-    getUserPreference();
-    Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => LoginView()),
-        (Route<dynamic> route) => false);
-  }
-
-  void goToProfile() {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => ProfileView(user: widget.user)));
+  void goToHome() {
+    Navigator.pop(context);
   }
 }

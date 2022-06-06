@@ -3,10 +3,11 @@ import 'package:message/configs/appcolors.dart';
 import 'package:message/configs/appvalues.dart';
 import 'package:message/databases/userdatabase.dart';
 import 'package:message/models/user.dart';
-import 'package:message/view/homechatview.dart';
-import 'package:message/view/loginview.dart';
+import 'package:message/view/chat/homechatview.dart';
+import 'package:message/view/login/loginview.dart';
 import 'package:message/widgets/widgetbutton.dart';
 import 'package:message/widgets/widgetinput.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({Key? key}) : super(key: key);
@@ -186,7 +187,7 @@ class _RegisterViewState extends State<RegisterView> {
     );
   }
 
-  void registerSuccess(User user) {
+  void registerSuccess(User user) async {
     showDialog(
         context: context,
         builder: (context) {
@@ -198,13 +199,19 @@ class _RegisterViewState extends State<RegisterView> {
                     onPressed: () {
                       goToLogin();
                     },
-                    child: Text('trở lại')),
+                    child: Text('Tới trang đăng nhập')),
                 TextButton(
                     onPressed: () {
+                      setPreferences(user);
                       goToHome(user);
                     },
-                    child: Text('Đồng ý')),
+                    child: Text('Đăng nhập')),
               ]);
         });
+  }
+
+  void setPreferences(User user) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt("userId", user.id ?? 0);
   }
 }

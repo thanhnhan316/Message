@@ -5,8 +5,9 @@ import 'package:message/configs/appimages.dart';
 import 'package:message/configs/appvalues.dart';
 import 'package:message/databases/userdatabase.dart';
 import 'package:message/models/user.dart';
-import 'package:message/view/homechatview.dart';
-import 'package:message/view/registerview.dart';
+import 'package:message/view/chat/homechatview.dart';
+import 'package:message/view/homepage/homeview.dart';
+import 'package:message/view/register/registerview.dart';
 import 'package:message/widgets/widgetbutton.dart';
 import 'package:message/widgets/widgetinput.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -149,7 +150,7 @@ class _LoginViewState extends State<LoginView> {
     //     context, MaterialPageRoute(builder: (context) => LoginView()));
     //xóa tất cả màn hình đã đi qua
     Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => HomeChatView(user: user)),
+        MaterialPageRoute(builder: (context) => HomeView(user: user)),
         (Route<dynamic> route) => false);
   }
 
@@ -177,10 +178,6 @@ class _LoginViewState extends State<LoginView> {
 
   void showToast(BuildContext context, String value) {
     final scaffold = ScaffoldMessenger.of(context);
-    scaffold.showSnackBar(
-      SnackBar(
-        content: Text(value),
-      ),
-    );
+    scaffold.showSnackBar(SnackBar(content: Text(value)));
   }
 }

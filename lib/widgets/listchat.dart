@@ -4,8 +4,8 @@ import 'package:message/configs/appcolors.dart';
 import 'package:message/configs/appimages.dart';
 import 'package:message/databases/userdatabase.dart';
 import 'package:message/models/user.dart';
-import 'package:message/view/chatview.dart';
-import 'package:message/view/homechatview.dart';
+import 'package:message/view/chat/chatview.dart';
+import 'package:message/view/chat/homechatview.dart';
 
 class ListChatView extends StatefulWidget {
   List<User> listUsers;

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:message/configs/appcolors.dart';
 import 'package:message/configs/appimages.dart';
+import 'package:message/configs/appvalues.dart';
 import 'package:message/databases/messagedatabase.dart';
 import 'package:message/models/message.dart';
 import 'package:message/models/user.dart';
@@ -114,13 +115,13 @@ class _ChatViewState extends State<ChatView> {
 
   Widget buildContent() {
     return Expanded(
-      child: ls.length == 0
-          ? Center(child: Text("Chưa có tin nhắn nào"))
-          : isLoading
-              ? Container(
-                  height: size.height * 0.1, child: CircularProgressIndicator())
-              : MessageItem(ls: ls, userId: userId)
-    );
+        child: ls.length == 0
+            ? Center(child: Text(AppValues.noMessage))
+            : isLoading
+                ? Container(
+                    height: size.height * 0.1,
+                    child: CircularProgressIndicator())
+                : MessageItem(ls: ls, userId: userId));
   }
 
   inputMessage() {
@@ -178,7 +179,7 @@ class _ChatViewState extends State<ChatView> {
           time: timeNow);
       await MessageDatabase.instance.create(message);
       setState(() {
-        inputController.value = TextEditingValue.empty;
+        inputController.clear();
       });
       print(
           "senderId = ${message.senderId}, receiverId = ${message.receiverId}, value = ${message.value},time = ${message.time}");

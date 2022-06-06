@@ -8,7 +8,7 @@ class AppColors {
   static final Color PRIMARY_DARK_COLOR = Color.fromRGBO(246, 133, 14, 1);
   static final Color BACKGROUNDGRAY = Color(0xff4D5468);
   static final Color WHITE = Colors.white;
-  static final Color NEXT_FLASH = Color(0xff7B1E58);
+  static final Color NEXT_FLASH = Color(0xffffffff);
   static final Color SKIP_SPLASH = Color(0xff9B9B9B);
   static final Color BACKGROUNDHOME = Color(0xff206E66);
   static final Color BLUECOLOR = Colors.blue;
