@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,6 +10,7 @@ import 'package:message/configs/appvalues.dart';
 import 'package:message/databases/userdatabase.dart';
 import 'package:message/models/user.dart';
 import 'package:message/view/chat/homechatview.dart';
+import 'package:message/view/homepage/homeview.dart';
 import 'package:message/widgets/widgetbutton.dart';
 import 'dart:async';
 import 'package:path_provider/path_provider.dart';
@@ -30,6 +32,7 @@ class _ProfileViewState extends State<ProfileView> {
   final emailController = TextEditingController();
   final statusController = TextEditingController();
   File? image;
+  late String imageName;
   late bool selectImage = false;
   @override
   Widget build(BuildContext context) {
@@ -171,10 +174,6 @@ class _ProfileViewState extends State<ProfileView> {
         ]));
   }
 
-  void goToHome() {
-    Navigator.pop(context);
-  }
-
   void checkUpdate() async {
     String userName = userNameController.value.text.trim();
     String fullName = fullNameController.value.text.trim();
@@ -187,20 +186,39 @@ class _ProfileViewState extends State<ProfileView> {
         fullName: fullName.isNotEmpty ? fullName : widget.user.fullName,
         password: widget.user.password,
         email: email.isNotEmpty ? email : widget.user.email,
-        avatar: widget.user.avatar,
+        avatar: imageName.isNotEmpty ? imageName : widget.user.avatar,
         status: status.isNotEmpty ? status : widget.user.status);
     await UserDatabase.instance.update(user);
     showToast(context, AppValues.savedChange);
-    goToHome();
+    reBuildHome(user);
+  }
+
+  void goToHome() {
+    Navigator.pop(context);
+  }
+
+  void reBuildHome(User user) {
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => HomeView(user: user)),
+        (Route<dynamic> route) => false);
   }
 
   Future PickAndGallery() async {
     try {
       final i = await ImagePicker().pickImage(source: ImageSource.gallery);
       if (i == null) return;
+      //file Hình ảnh tạm thời
       final imageTemporary = File(i.path);
+      //Lấy địa chỉ foder trong thiết bị
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String path = appDocDir.path;
+
+      final File newImage =
+          await imageTemporary.copy('$path/${getRandString(10)}.jpg');
+
       setState(() {
-        image = imageTemporary;
+        image = newImage;
+        imageName = newImage.path;
       });
     } on PlatformException catch (e) {
       print("Lỗi : $e");
@@ -218,13 +236,14 @@ class _ProfileViewState extends State<ProfileView> {
       Directory appDocDir = await getApplicationDocumentsDirectory();
       String path = appDocDir.path;
 
-      final File newImage = await imageTemporary.copy('$path/filename.jpg');
-      print("111111111111  : ${newImage.path}");
-      print("222222222222  : ${imageTemporary.path}");
+      final File newImage =
+          await imageTemporary.copy('$path/${getRandString(10)}.jpg');
 
       setState(() {
         image = newImage;
+        imageName = newImage.path;
       });
+      print("${image!.path}");
     } on PlatformException catch (e) {
       print("Lỗi : $e");
     }
@@ -245,6 +264,12 @@ class _ProfileViewState extends State<ProfileView> {
 
     return file.path;
   }
+}
+
+String getRandString(int len) {
+  var random = Random.secure();
+  var values = List<int>.generate(len, (i) => random.nextInt(255));
+  return base64UrlEncode(values);
 }
 
 void showToast(BuildContext context, String value) {
