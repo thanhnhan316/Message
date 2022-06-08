@@ -38,68 +38,62 @@ class _MessageState extends State<MessageItem> {
 
   Widget buildMessage(Message message, int index) {
     return GestureDetector(
-      onLongPress: () {
-        setState(() {
-          checkDelete[index] = true;
-        });
-      },
-      child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 17, vertical: 9),
-          margin: message.senderId == widget.userId
-              ? EdgeInsets.only(bottom: 10, left: size.width * 0.3)
-              : EdgeInsets.only(bottom: 10, right: size.width * 0.3),
-          decoration: BoxDecoration(
-              color: message.senderId == widget.userId
-                  ? AppColors.SENDMESSAGE
-                  : AppColors.WHITE,
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(15.0),
-                  bottomLeft: Radius.circular(15.0))),
-          child: Container(
-            child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: message.senderId == widget.userId
-                    ? CrossAxisAlignment.end
-                    : CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(message.time,
-                      style: TextStyle(
-                          color: AppColors.BLACK38,
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.w600)),
-                  SizedBox(height: 8.0),
-                  Text(message.value,
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.w600,
-                      )),
-                  checkDelete[index]
-                      ? message.senderId == widget.userId
-                          ? Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                TextButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        checkDelete[index] = false;
-                                      });
-                                    },
-                                    child: Text("hủy")),
-                                TextButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        checkDelete[index] = false;
-                                      });
-                                      delete(message.id, index);
-                                    },
-                                    child: Text("xóa"))
-                              ],
-                            )
-                          : Container()
-                      : Container()
-                ]),
-          )),
-    );
+        onLongPress: () {
+          setState(() {
+            checkDelete[index] = true;
+          });
+        },
+        child: Column(
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: message.senderId == widget.userId
+                ? CrossAxisAlignment.end
+                : CrossAxisAlignment.start,
+            children: [
+              Container(
+                  constraints: BoxConstraints(maxWidth: size.width * 0.75),
+                  padding:
+                      EdgeInsets.only(top: 5, bottom: 5, left: 15, right: 15),
+                  margin: EdgeInsets.only(bottom: 7),
+                  decoration: BoxDecoration(
+                      color: message.senderId == widget.userId
+                          ? AppColors.SENDMESSAGE
+                          : AppColors.WHITE,
+                      borderRadius: BorderRadius.all(Radius.circular(15))),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: <Widget>[
+                        Text(message.time,
+                            style: TextStyle(
+                                color: AppColors.BLACK38,
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.w600)),
+                        SizedBox(height: 8.0),
+                        Text(message.value,
+                            style: TextStyle(
+                                fontSize: 16.0, fontWeight: FontWeight.w600))
+                      ])),
+              checkDelete[index]
+                  ? message.senderId == widget.userId
+                      ? Row(mainAxisSize: MainAxisSize.min, children: [
+                          TextButton(
+                              onPressed: () {
+                                setState(() {
+                                  checkDelete[index] = false;
+                                });
+                              },
+                              child: Text("hủy")),
+                          TextButton(
+                              onPressed: () {
+                                setState(() {
+                                  checkDelete[index] = false;
+                                });
+                                delete(message.id, index);
+                              },
+                              child: Text("xóa"))
+                        ])
+                      : SizedBox.shrink()
+                  : SizedBox.shrink()
+            ]));
   }
 
   void delete(int? id, int index) async {
