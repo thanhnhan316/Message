@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'package:flutter/services.dart';
 import 'package:message/models/message.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
@@ -17,7 +19,30 @@ class MessageDatabase {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, filePath);
 
-    return await openDatabase(path, version: 1, onCreate: _createDB);
+    ///data/user/0/com.example.message/databases/messages.db
+    print(path);
+
+    // Kiểm tra xem cơ sở dữ liệu có tồn tại không
+    var exists = await databaseExists(path);
+
+    if (!exists) {
+      // Chỉ xảy ra lần đầu tiên bạn khởi chạy ứng dụng
+
+      try {
+        await Directory(dirname(path)).create(recursive: true);
+      } catch (_) {}
+
+      // Sao chép từ nội dung
+      ByteData data = await rootBundle.load(join("assets/db", filePath));
+      List<int> bytes =
+          data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+
+      // Viết và xóa các byte đã viết
+      await File(path).writeAsBytes(bytes, flush: true);
+    }
+
+    return await openDatabase(path,
+        readOnly: true, version: 1, onCreate: _createDB);
   }
 
   Future _createDB(Database db, int version) async {
@@ -68,18 +93,6 @@ CREATE TABLE $tableMessage (
     final result = await db.query(tableMessage);
     return result.map((json) => Message.fromJson(json)).toList();
   }
-
-// //Cập nhật thông tin một message
-//   Future<int> update(Message users) async {
-//     final db = await instance.database;
-
-//     return db.update(
-//       tableMessage,
-//       users.toJson(),
-//       where: '${MessageFields.id} = ?',
-//       whereArgs: [users.id],
-//     );
-//   }
 
 //Xóa thông tin một message
   Future<int> delete(int id) async {

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:message/configs/appcolors.dart';
 import 'package:message/configs/appimages.dart';
 import 'package:message/configs/appvalues.dart';
-import 'package:message/databases/messagedatabase.dart';
+import 'package:message/databases/messagedb.dart';
 import 'package:message/models/message.dart';
 import 'package:message/models/user.dart';
 import 'package:message/widgets/message.dart';

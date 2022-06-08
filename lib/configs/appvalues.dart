@@ -22,7 +22,7 @@ class AppValues {
 
 //profile
   static final String saveChange = 'Lưu thay đổi';
-  static final String undo = 'Hoàn tác';
+  static final String undo = 'Trở về';
   static final String savedChange = 'Đã lưu thay đổi';
 
 //chat
@@ -30,6 +30,7 @@ class AppValues {
 
 //home
   static final String projectName = 'Project name';
+  static final String setting = 'Thiết lập';
   static final String review = 'Ôn tập';
   static final String topic = 'Đề ';
   static final String did = 'Số đề đã giải';

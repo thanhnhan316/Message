@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:message/configs/appcolors.dart';
 import 'package:message/configs/appvalues.dart';
-import 'package:message/databases/userdatabase.dart';
+import 'package:message/databases/userdb.dart';
 import 'package:message/models/user.dart';
 import 'package:message/view/chat/homechatview.dart';
 import 'package:message/view/login/loginview.dart';

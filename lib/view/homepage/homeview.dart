@@ -38,7 +38,7 @@ class _HomeViewState extends State<HomeView> {
           child: Column(children: [
             buildAppbar(),
             SizedBox(height: 20),
-            achievements(11, 8.25),
+            buildAchievements(11, 8.25),
             buildItem()
           ]))
     ]);
@@ -64,6 +64,15 @@ class _HomeViewState extends State<HomeView> {
                           Icon(Icons.person, size: size.height * 0.037),
                           SizedBox(width: 15),
                           Text(AppValues.profile)
+                        ])))),
+                PopupMenuItem(
+                    child: GestureDetector(
+                        onTap: () {},
+                        child: Container(
+                            child: Row(children: [
+                          Icon(Icons.settings, size: size.height * 0.037),
+                          SizedBox(width: 15),
+                          Text(AppValues.setting)
                         ])))),
                 PopupMenuItem(
                     child: GestureDetector(
@@ -136,7 +145,7 @@ class _HomeViewState extends State<HomeView> {
                     ]))));
   }
 
-  Widget achievements(int test, double point) {
+  Widget buildAchievements(int test, double point) {
     return Card(
         elevation: 5,
         color: Colors.transparent,

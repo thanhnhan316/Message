@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:message/configs/appcolors.dart';
-import 'package:message/databases/messagedatabase.dart';
+import 'package:message/databases/messagedb.dart';
 import 'package:message/models/message.dart';
 
 class MessageItem extends StatefulWidget {
