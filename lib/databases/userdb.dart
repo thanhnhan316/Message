@@ -24,6 +24,9 @@ class UserDatabase {
     ///data/user/0/com.example.message/databases/users.db
     print(path);
 
+    // //xóa db(nếu reStart App thì db sẽ bị xóa tất cả nên sẽ không dùng deleteDatabase)
+    // await deleteDatabase(path);
+
     // Kiểm tra xem cơ sở dữ liệu có tồn tại không
     var exists = await databaseExists(path);
 

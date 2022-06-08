@@ -19,8 +19,10 @@ class MessageDatabase {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, filePath);
 
-    ///data/user/0/com.example.message/databases/messages.db
     print(path);
+
+    // //xóa db(nếu reStart App thì db sẽ bị xóa tất cả nên sẽ không dùng deleteDatabase)
+    // await deleteDatabase(path);
 
     // Kiểm tra xem cơ sở dữ liệu có tồn tại không
     var exists = await databaseExists(path);
@@ -41,8 +43,7 @@ class MessageDatabase {
       await File(path).writeAsBytes(bytes, flush: true);
     }
 
-    return await openDatabase(path,
-        readOnly: true, version: 1, onCreate: _createDB);
+    return await openDatabase(path, version: 1, onCreate: _createDB);
   }
 
   Future _createDB(Database db, int version) async {
