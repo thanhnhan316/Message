@@ -1,11 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:message/configs/appcolors.dart';
 import 'package:message/configs/appimages.dart';
 import 'package:message/configs/appvalues.dart';
 import 'package:message/databases/userdb.dart';
 import 'package:message/models/user.dart';
-import 'package:message/view/chat/homechatview.dart';
 import 'package:message/view/homepage/homeview.dart';
 import 'package:message/view/register/registerview.dart';
 import 'package:message/widgets/widgetbutton.dart';
