@@ -46,8 +46,7 @@ class UserDatabase {
       await File(path).writeAsBytes(bytes, flush: true);
     }
 
-    return await openDatabase(path,
-        readOnly: true, version: 1, onCreate: _createDB);
+    return await openDatabase(path, version: 1, onCreate: _createDB);
   }
 
   Future _createDB(Database db, int version) async {

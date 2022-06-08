@@ -9,7 +9,6 @@ import 'package:message/configs/appcolors.dart';
 import 'package:message/configs/appvalues.dart';
 import 'package:message/databases/userdb.dart';
 import 'package:message/models/user.dart';
-import 'package:message/view/chat/homechatview.dart';
 import 'package:message/view/homepage/homeview.dart';
 import 'package:message/widgets/widgetbutton.dart';
 import 'dart:async';
@@ -32,7 +31,7 @@ class _ProfileViewState extends State<ProfileView> {
   final emailController = TextEditingController();
   final statusController = TextEditingController();
   File? image;
-  late String imageName;
+  late String imageName = widget.user.avatar;
   late bool selectImage = false;
   @override
   Widget build(BuildContext context) {
@@ -49,7 +48,9 @@ class _ProfileViewState extends State<ProfileView> {
                 child: image != null
                     ? ClipRRect(
                         child: Image.file(image!,
-                            width: double.maxFinite, fit: BoxFit.fitWidth),
+                            width: double.maxFinite,
+                            height: double.maxFinite,
+                            fit: BoxFit.cover),
                         borderRadius: BorderRadius.circular(50.0))
                     : widget.user.avatar == "avatar"
                         ? ClipRRect(
@@ -57,7 +58,11 @@ class _ProfileViewState extends State<ProfileView> {
                                 "https://cdn-icons-png.flaticon.com/512/149/149071.png"),
                             borderRadius: BorderRadius.circular(50.0))
                         : ClipRRect(
-                            child: Image.asset(widget.user.avatar),
+                            child: Image.memory(
+                                base64Decode(widget.user.avatar),
+                                width: double.maxFinite,
+                                height: double.maxFinite,
+                                fit: BoxFit.cover),
                             borderRadius: BorderRadius.circular(50.0))),
             Positioned(
                 child: IconButton(
@@ -186,7 +191,7 @@ class _ProfileViewState extends State<ProfileView> {
         fullName: fullName.isNotEmpty ? fullName : widget.user.fullName,
         password: widget.user.password,
         email: email.isNotEmpty ? email : widget.user.email,
-        avatar: imageName.isNotEmpty ? imageName : widget.user.avatar,
+        avatar: imageName,
         status: status.isNotEmpty ? status : widget.user.status);
     await UserDatabase.instance.update(user);
     showToast(context, AppValues.savedChange);
@@ -207,18 +212,13 @@ class _ProfileViewState extends State<ProfileView> {
     try {
       final i = await ImagePicker().pickImage(source: ImageSource.gallery);
       if (i == null) return;
-      //file Hình ảnh tạm thời
-      final imageTemporary = File(i.path);
-      //Lấy địa chỉ foder trong thiết bị
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String path = appDocDir.path;
-
-      final File newImage =
-          await imageTemporary.copy('$path/${getRandString(10)}.jpg');
-
+      final bytes = File(i.path).readAsBytesSync();
+      final newImage = File(i.path);
+      String img64 = base64Encode(bytes);
+      print(img64);
       setState(() {
         image = newImage;
-        imageName = newImage.path;
+        imageName = img64;
       });
     } on PlatformException catch (e) {
       print("Lỗi : $e");
@@ -230,20 +230,14 @@ class _ProfileViewState extends State<ProfileView> {
       //lấy ảnh ra
       final i = await ImagePicker().pickImage(source: ImageSource.camera);
       if (i == null) return;
-      //file Hình ảnh tạm thời
-      final imageTemporary = File(i.path);
-      //Lấy địa chỉ foder trong thiết bị
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String path = appDocDir.path;
-
-      final File newImage =
-          await imageTemporary.copy('$path/${getRandString(10)}.jpg');
-
+      final bytes = File(i.path).readAsBytesSync();
+      final newImage = File(i.path);
+      String img64 = base64Encode(bytes);
+      print(img64);
       setState(() {
         image = newImage;
-        imageName = newImage.path;
+        imageName = img64;
       });
-      print("${image!.path}");
     } on PlatformException catch (e) {
       print("Lỗi : $e");
     }
