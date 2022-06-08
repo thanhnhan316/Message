@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:message/configs/appcolors.dart';
 import 'package:message/configs/appimages.dart';
@@ -91,9 +93,18 @@ class _ChatViewState extends State<ChatView> {
                   color: AppColors.BLACK87, size: size.height * 0.04)),
           Spacer(flex: 2),
           CircleAvatar(
-            radius: size.height * 0.027,
-            backgroundImage: AssetImage(AppImages.Logo),
-          ),
+              radius: size.height * 0.032,
+              child: widget.user.avatar == "avatar"
+                  ? ClipRRect(
+                      child: Image.network(
+                          "https://cdn-icons-png.flaticon.com/512/149/149071.png"),
+                      borderRadius: BorderRadius.circular(50.0))
+                  : ClipRRect(
+                      child: Image.memory(base64Decode(widget.user.avatar),
+                          width: double.maxFinite,
+                          height: double.maxFinite,
+                          fit: BoxFit.cover),
+                      borderRadius: BorderRadius.circular(50.0))),
           Spacer(flex: 1),
           Text(widget.user.userName,
               style: TextStyle(

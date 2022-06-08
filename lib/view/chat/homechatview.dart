@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:message/configs/appcolors.dart';
 import 'package:message/configs/appimages.dart';
@@ -114,9 +116,23 @@ class _HomeChatViewState extends State<HomeChatView> {
               icon: Icon(Icons.arrow_back,
                   color: AppColors.BLACK87, size: size.height * 0.04)),
           SizedBox(width: 20),
+          CircleAvatar(
+              radius: size.width * 0.055,
+              child: widget.user.avatar == "avatar"
+                  ? ClipRRect(
+                      child: Image.network(
+                          "https://cdn-icons-png.flaticon.com/512/149/149071.png"),
+                      borderRadius: BorderRadius.circular(50.0))
+                  : ClipRRect(
+                      child: Image.memory(base64Decode(widget.user.avatar),
+                          width: double.maxFinite,
+                          height: double.maxFinite,
+                          fit: BoxFit.cover),
+                      borderRadius: BorderRadius.circular(50.0))),
+          SizedBox(width: 10),
           Text(widget.user.userName,
               style: TextStyle(
-                  fontSize: size.height * 0.035, fontWeight: FontWeight.bold))
+                  fontSize: size.height * 0.035, fontWeight: FontWeight.bold)),
         ]));
   }
 

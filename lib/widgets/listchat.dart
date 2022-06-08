@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:message/configs/appcolors.dart';
@@ -76,7 +78,17 @@ class _ListChatViewState extends State<ListChatView> {
               Row(children: <Widget>[
                 CircleAvatar(
                     radius: size.height * 0.032,
-                    backgroundImage: AssetImage(AppImages.imgLogo)),
+                    child: user.avatar == "avatar"
+                        ? ClipRRect(
+                            child: Image.network(
+                                "https://cdn-icons-png.flaticon.com/512/149/149071.png"),
+                            borderRadius: BorderRadius.circular(50.0))
+                        : ClipRRect(
+                            child: Image.memory(base64Decode(user.avatar),
+                                width: double.maxFinite,
+                                height: double.maxFinite,
+                                fit: BoxFit.cover),
+                            borderRadius: BorderRadius.circular(50.0))),
                 SizedBox(width: 10.0),
                 Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
