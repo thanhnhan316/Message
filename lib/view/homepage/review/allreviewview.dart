@@ -1,6 +1,9 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:message/configs/appcolors.dart';
 import 'package:message/configs/appvalues.dart';
+import 'package:message/databases/topicdb.dart';
+import 'package:message/models/topic.dart';
 import 'package:message/view/homepage/review/reviewview.dart';
 
 class AllReviewView extends StatefulWidget {
@@ -12,6 +15,27 @@ class AllReviewView extends StatefulWidget {
 
 class _AllReviewViewState extends State<AllReviewView> {
   late Size size;
+  List<Topic> lsTopic = [];
+  bool isLoading = true;
+  Random random = new Random();
+
+  @override
+  void initState() {
+    super.initState();
+    addTopic(() {
+      getAllTopic();
+    });
+  }
+
+  // get dữ liệu từ database ra
+  Future getAllTopic() async {
+    lsTopic = await TopicDatabase.instance.readAllTopic();
+    setState(() {
+      isLoading = false;
+    });
+    for (Topic i in lsTopic) print(i.id);
+  }
+
   @override
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
@@ -23,14 +47,16 @@ class _AllReviewViewState extends State<AllReviewView> {
   }
 
   Widget buildBody() {
-    return ListView.builder(
-        itemCount: 10,
-        itemBuilder: (context, i) {
-          return buildCard();
-        });
+    return isLoading
+        ? Center(child: CircularProgressIndicator())
+        : ListView.builder(
+            itemCount: lsTopic.length,
+            itemBuilder: (context, i) {
+              return buildCard(lsTopic[i], AppColors.colors[random.nextInt(5)]);
+            });
   }
 
-  Widget buildCard() {
+  Widget buildCard(Topic topic, Color colors) {
     return Column(children: [
       SizedBox(height: 20),
       Padding(
@@ -52,23 +78,26 @@ class _AllReviewViewState extends State<AllReviewView> {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             Icon(Icons.auto_stories,
-                                size: size.height * 0.042,
-                                color: AppColors.BACKGROUND),
+                                size: size.height * 0.042, color: colors),
                             SizedBox(width: 10),
                             Expanded(
                                 child: Column(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceAround,
                                     children: [
-                                  Text("Tên bộ đề",
+                                  Text("Bộ đề ôn ${topic.topicName}",
                                       style: TextStyle(
-                                          fontSize: size.height * 0.02),
+                                          fontSize: size.height * 0.02,
+                                          color: colors),
                                       maxLines: 1),
-                                  Text('30 Câu'),
+                                  Text(
+                                    '30 Câu',
+                                    style: TextStyle(color: colors),
+                                  ),
                                   Container(
                                       height: 1,
                                       width: size.width * 0.6,
-                                      color: AppColors.BACKGROUND)
+                                      color: colors)
                                 ]))
                           ])))))
     ]);

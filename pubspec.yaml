@@ -63,6 +63,7 @@ flutter:
     - assets/images/
     - assets/db/messages.db
     - assets/db/users.db
+    - assets/db/topics.db
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -18,4 +18,5 @@ class AppColors {
   static final Color BLACK38 = Colors.black38;
   static final Color RED = Colors.red.shade400;
 
+  static final List colors = [RED, BACKGROUND, BLUECOLOR, PRIMARY_COLOR,BLACK87];
 }
