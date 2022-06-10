@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:message/configs/appcolors.dart';
-import 'package:message/configs/appimages.dart';
 import 'package:message/configs/appvalues.dart';
 import 'package:message/databases/messagedb.dart';
 import 'package:message/models/message.dart';
@@ -50,7 +49,9 @@ class _ChatViewState extends State<ChatView> {
         ls.add(i);
       }
     }
-    ls = ls.reversed.toList();
+    setState(() {
+      ls = ls.reversed.toList();
+    });
     for (Message i in ls) {
       print(
           "senderId = ${i.senderId}, receiverId = ${i.receiverId}, value = ${i.value},time = ${i.time}");

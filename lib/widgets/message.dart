@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:message/configs/appcolors.dart';
 import 'package:message/databases/messagedb.dart';
@@ -53,7 +52,7 @@ class _MessageState extends State<MessageItem> {
                   constraints: BoxConstraints(maxWidth: size.width * 0.75),
                   padding:
                       EdgeInsets.only(top: 5, bottom: 5, left: 15, right: 15),
-                  margin: EdgeInsets.only(bottom: 7),
+                  margin: EdgeInsets.only(bottom: 7, left: 4, right: 4),
                   decoration: BoxDecoration(
                       color: message.senderId == widget.userId
                           ? AppColors.SENDMESSAGE

@@ -3,11 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:message/configs/appcolors.dart';
-import 'package:message/configs/appimages.dart';
 import 'package:message/databases/userdb.dart';
 import 'package:message/models/user.dart';
 import 'package:message/view/chat/chatview.dart';
-import 'package:message/view/chat/homechatview.dart';
 
 class ListChatView extends StatefulWidget {
   List<User> listUsers;
