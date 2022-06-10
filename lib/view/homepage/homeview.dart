@@ -3,6 +3,7 @@ import 'package:message/configs/appcolors.dart';
 import 'package:message/configs/appvalues.dart';
 import 'package:message/models/user.dart';
 import 'package:message/view/chat/homechatview.dart';
+import 'package:message/view/establish/establishview.dart';
 import 'package:message/view/homepage/review/allreviewview.dart';
 import 'package:message/view/login/loginview.dart';
 import 'package:message/view/profile/profileview.dart';
@@ -67,7 +68,9 @@ class _HomeViewState extends State<HomeView> {
                         ])))),
                 PopupMenuItem(
                     child: GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          goToEstablish();
+                        },
                         child: Container(
                             child: Row(children: [
                           Icon(Icons.settings, size: size.height * 0.037),
@@ -276,6 +279,11 @@ class _HomeViewState extends State<HomeView> {
   void goToReview() {
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => AllReviewView()));
+  }
+
+  void goToEstablish() {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => EstablishView()));
   }
 }
 
