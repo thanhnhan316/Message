@@ -111,7 +111,8 @@ List<Question> lsQuestion = [
       answer3: "3 đỉnh",
       answer4: "Cả A,B,C đều đúng",
       correctAnswer: "Cả A,B,C đều đúng",
-      information: "Không có thông tin thêm"),
+      information:
+          "Tam giác ABC là hình gồm ba đoạn thẳng AB, BC, CA khi ba điểm A, B, C không thẳng hàng."),
   Question(
       topicId: 1,
       content:
@@ -143,14 +144,16 @@ List<Question> lsQuestion = [
 ];
 
 //database question with sqlite (insert)
-void addQuestion(Function function) async {
-  List<Question> ls =
-      await QuestionsDatabase.instance.readAllQuestion();
+Future<List<Question>> addQuestion(int id) async {
+  List<Question> ls = await QuestionsDatabase.instance.readAllQuestion();
+  List<Question> lsById = await QuestionsDatabase.instance.readQuestionById(id);
+
   if (ls.isEmpty) {
     for (Question i in lsQuestion) {
       await QuestionsDatabase.instance.create(i);
-      print(i.content);
     }
+    print("Nạp question cho data khi restart");
+    lsById = await QuestionsDatabase.instance.readQuestionById(id);
   }
-  function();
+  return lsById;
 }

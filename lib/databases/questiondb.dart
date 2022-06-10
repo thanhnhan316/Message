@@ -24,7 +24,7 @@ class QuestionsDatabase {
     print(path);
 
     // //xóa db(nếu reStart App thì db sẽ bị xóa tất cả nên sẽ không dùng deleteDatabase)
-    // await deleteDatabase(path);
+    await deleteDatabase(path);
 
     // Kiểm tra xem cơ sở dữ liệu có tồn tại không
     var exists = await databaseExists(path);
@@ -95,6 +95,15 @@ CREATE TABLE $tableQuestion (
     // sắp xếp
     // final orderBy = '${QuestionFields.QuestionName} ASC';
     final result = await db.query(tableQuestion);
+    return result.map((json) => Question.fromJson(json)).toList();
+  }
+
+  //Lấy tất cả Question có id là id
+  Future<List<Question>> readQuestionById(int id) async {
+    final db = await instance.database;
+    // điều kiện
+    final where = '${QuestionFields.topicId} = $id';
+    final result = await db.query(tableQuestion, where: where);
     return result.map((json) => Question.fromJson(json)).toList();
   }
 

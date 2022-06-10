@@ -42,15 +42,17 @@ List<String> lsTopicName = [
   "Toán đại số 11"
 ];
 //database topic with sqlite (insert)
-void addTopic(Function function) async {
+Future<List<Topic>> addTopic() async {
   List<Topic> lsTopic = await TopicDatabase.instance.readAllTopic();
 
   if (lsTopic.isEmpty) {
     for (String i in lsTopicName) {
       final topic = Topic(topicName: i);
       await TopicDatabase.instance.create(topic);
-      print(i);
+    
     }
+    print("Nạp topic cho data khi restart");
+    lsTopic = await TopicDatabase.instance.readAllTopic();
   }
-  function();
+  return lsTopic;
 }

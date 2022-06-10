@@ -2,7 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:message/configs/appcolors.dart';
 import 'package:message/configs/appvalues.dart';
-import 'package:message/databases/topicdb.dart';
+import 'package:message/models/question.dart';
 import 'package:message/models/topic.dart';
 import 'package:message/view/homepage/review/reviewview.dart';
 
@@ -22,14 +22,12 @@ class _AllReviewViewState extends State<AllReviewView> {
   @override
   void initState() {
     super.initState();
-    addTopic(() {
-      getAllTopic();
-    });
+    getAllTopic();
   }
 
   // get dữ liệu từ database ra
   Future getAllTopic() async {
-    lsTopic = await TopicDatabase.instance.readAllTopic();
+    lsTopic = await addTopic();
     setState(() {
       isLoading = false;
     });
@@ -62,7 +60,7 @@ class _AllReviewViewState extends State<AllReviewView> {
           padding: EdgeInsets.only(left: 20, right: 20),
           child: GestureDetector(
               onTap: () {
-                goToReview();
+                goToReview(topic);
               },
               child: Card(
                   elevation: 7,
@@ -90,7 +88,7 @@ class _AllReviewViewState extends State<AllReviewView> {
                                           color: colors),
                                       maxLines: 1),
                                   Text(
-                                    '30 Câu',
+                                    "${topicLength(topic.id!)} câu",
                                     style: TextStyle(color: colors),
                                   ),
                                   Container(
@@ -102,8 +100,16 @@ class _AllReviewViewState extends State<AllReviewView> {
     ]);
   }
 
-  void goToReview() {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => ReviewView()));
+  Future<int> topicLength(int id) async {
+    print("11111111");
+    List<Question> ls = await addQuestion(id);
+    int n = ls.length;
+    print(ls.length);
+    return n;
+  }
+
+  void goToReview(Topic topic) {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => ReviewView(topic: topic)));
   }
 }

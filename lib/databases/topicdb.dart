@@ -24,7 +24,7 @@ class TopicDatabase {
     print(path);
 
     // //xóa db(nếu reStart App thì db sẽ bị xóa tất cả nên sẽ không dùng deleteDatabase)
-    // await deleteDatabase(path);
+    await deleteDatabase(path);
 
     // Kiểm tra xem cơ sở dữ liệu có tồn tại không
     var exists = await databaseExists(path);
