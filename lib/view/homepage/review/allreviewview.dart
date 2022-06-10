@@ -33,7 +33,6 @@ class _AllReviewViewState extends State<AllReviewView> {
     setState(() {
       isLoading = false;
     });
-    for (Topic i in lsTopic) print(i.id);
   }
 
   @override
